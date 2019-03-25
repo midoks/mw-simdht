@@ -76,6 +76,14 @@ def getDbConf():
     return file
 
 
+def getCheckdbPos():
+    file = getServerDir() + "/start_pos.pl"
+    return file
+
+def getBlackList():
+    file = getServerDir() + "/workers/black_list.txt"
+    return file
+
 def getRunLog():
     file = getServerDir() + "/logs.pl"
     return file
@@ -173,6 +181,7 @@ def initdInstall():
     initd_bin = getInitDFile()
     shutil.copyfile(mysql_bin, initd_bin)
     public.execShell('chmod +x ' + initd_bin)
+    public.execShell('chkconfig --add ' + getPluginName())
     return 'ok'
 
 
@@ -182,6 +191,7 @@ def initdUinstall():
             return "Apple Computer does not support"
     initd_bin = getInitDFile()
     os.remove(initd_bin)
+    public.execShell('chkconfig --del ' + getPluginName())
     return 'ok'
 
 
@@ -289,6 +299,10 @@ if __name__ == "__main__":
         print getSqlFile()
     elif func == 'get_db_conf':
         print getDbConf()
+    elif func == 'get_checkdb_pos':
+        print getCheckdbPos()
+    elif func == 'get_black_list':
+        print getBlackList()
     elif func == 'get_run_Log':
         print getRunLog()
     elif func == 'get_trend_data':

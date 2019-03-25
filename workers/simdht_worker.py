@@ -60,6 +60,9 @@ DB_NAME = cp.get(section_db, "DB_NAME")
 DB_SIZE_LIMIT = cp.get(section_db, "DB_SIZE_LIMIT")
 DB_SIZE_TICK = cp.getint(section_db, "DB_SIZE_TICK")
 DB_DEL_LINE = cp.getint(section_db, "DB_DEL_LINE")
+DB_DEL_SWITCH = cp.get(section_db, "DB_DEL_SWITCH")
+DB_DEL_TIMER = cp.get(section_db, "DB_DEL_TIMER")
+
 BLACK_FILE = 'black_list.txt'
 
 BOOTSTRAP_NODES = (
@@ -392,9 +395,15 @@ class Master(Thread):
     def run(self):
         self.name = threading.currentThread().getName()
         print self.name, 'started'
+        limit_file = '../limit.pl'
         while True:
             while self.metadata_queue.qsize() > 0:
-                self.got_torrent()
+                if not os.path.exists(limit_file):
+                    self.got_torrent()
+                else:
+                    print 'no crawling beyond limit !!!'
+                    time.sleep(600)
+
             address, binhash, dtype = self.queue.get()
             if binhash in self.visited:
                 continue
@@ -482,11 +491,18 @@ class DBCheck(Master):
         data = self.query(sql)
         db_size = data[0][0]
 
+        limit_file = '../limit.pl'
         if db_size > db_size_limit:
-            self.delete_db(DB_DEL_LINE)
+            if not os.path.exists(limit_file):
+                writeFile(limit_file, 'ok')
+            #Open delete
+            if DB_DEL_SWITCH == '1':
+                self.delete_db(DB_DEL_LINE)
             self.query('OPTIMIZE TABLE  `search_hash`')
             self.query('OPTIMIZE TABLE  `search_filelist`')
-
+        else:
+            if os.path.exists(limit_file):
+                os.remove(limit_file)
         print 'db size limit:', db_size_limit, 'db has size:', db_size
         # self.delete_db(DB_DEL_LINE)
 
@@ -517,16 +533,21 @@ class DBDataCheck(Master):
 
     def check_db_data(self):
 
+        print 'check_db_data'
+
         max_data = self.query('select max(id) from search_hash')
         max_id = max_data[0][0]
 
         min_id = self.get_start_id()
+        if min_id == None:
+            min_id = 0
         self.set_start_id(max_id)
 
         print 'min_id', min_id, 'max_id', max_id, 'ok!'
 
         limit_num = 1000
-        page = math.ceil((max_id - min_id) / limit_num)
+        page = math.ceil((max_id - min_id) / limit_num) + 1
+        print 'page:',page
 
         for p in range(int(page)):
             start_id = int(min_id) + p * limit_num
@@ -556,7 +577,7 @@ class DBDataCheck(Master):
     def run(self):
         while True:
             self.check_db_data()
-            time.sleep(600)
+            time.sleep(DB_DEL_TIMER)
 
 
 def announce(info_hash, address):
