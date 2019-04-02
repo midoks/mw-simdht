@@ -13,6 +13,7 @@ CREATE TABLE `search_hash` (
   `last_seen` datetime NOT NULL,
   `requests` int(10) unsigned NOT NULL,
   `comment` varchar(255) DEFAULT NULL,
+  `is_dmca` tinyint(4) NULL DEFAULT 0,
   `creator` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `info_hash` (`info_hash`),

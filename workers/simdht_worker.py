@@ -61,7 +61,7 @@ DB_SIZE_LIMIT = cp.get(section_db, "DB_SIZE_LIMIT")
 DB_SIZE_TICK = cp.getint(section_db, "DB_SIZE_TICK")
 DB_DEL_LINE = cp.getint(section_db, "DB_DEL_LINE")
 DB_DEL_SWITCH = cp.get(section_db, "DB_DEL_SWITCH")
-DB_DEL_TIMER = cp.get(section_db, "DB_DEL_TIMER")
+DB_DEL_TIMER = cp.getint(section_db, "DB_DEL_TIMER")
 
 BLACK_FILE = 'black_list.txt'
 
@@ -577,7 +577,8 @@ class DBDataCheck(Master):
     def run(self):
         while True:
             self.check_db_data()
-            time.sleep(DB_DEL_TIMER)
+            print DB_DEL_TIMER
+            time.sleep(float(DB_DEL_TIMER))
 
 
 def announce(info_hash, address):
