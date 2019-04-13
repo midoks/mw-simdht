@@ -8,6 +8,7 @@
 	"versions":"1.0",
 	"shell":"install.sh",
 	"checks":"server/simdht",
+	"path":"server/simdht",
 	"author":"midoks",
 	"home":"",
 	"date":"2018-12-20",
