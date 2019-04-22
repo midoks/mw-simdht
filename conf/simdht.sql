@@ -14,6 +14,7 @@ CREATE TABLE `search_hash` (
   `requests` int(10) unsigned NOT NULL,
   `comment` varchar(255) DEFAULT NULL,
   `is_dmca` tinyint(4) NULL DEFAULT 0,
+  `is_has` tinyint(4) NULL DEFAULT 1,
   `creator` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `info_hash` (`info_hash`),

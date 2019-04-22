@@ -419,8 +419,7 @@ class Master(Thread):
             date = datetime.datetime(date.year, date.month, date.day)
 
             # Check if we have this info_hash
-            self.dbcurr.execute(
-                'SELECT id FROM search_hash WHERE info_hash=%s', (info_hash,))
+            self.dbcurr.execute('SELECT id FROM search_hash WHERE info_hash=%s', (info_hash,))
             y = self.dbcurr.fetchone()
             if y:
                 self.n_valid += 1
@@ -608,8 +607,8 @@ if __name__ == "__main__":
     check.start()
 
     print 'DBDataCheck start'
-    checkData = DBDataCheck(master)
-    checkData.start()
+    # checkData = DBDataCheck(master)
+    # checkData.start()
 
     print 'DHTServer start'
     dht = DHTServer(master, "0.0.0.0", 6881, max_node_qsize=MAX_NODE_QSIZE)
