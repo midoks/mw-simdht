@@ -603,8 +603,8 @@ if __name__ == "__main__":
     rpcthread.start()
 
     print 'DBCheck start'
-    check = DBCheck(master)
-    check.start()
+    # check = DBCheck(master)
+    # check.start()
 
     print 'DBDataCheck start'
     # checkData = DBDataCheck(master)
