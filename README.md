@@ -5,7 +5,7 @@ mdserver-web|simdht管理
  ### 安装过程	
 
  ```	
-* 先进行压缩 `cd mw-simdht && zip  simdht.zip -r ./* `	
+* 先进行压缩 `cd mw-simdht && zip  simdht.zip -r ./* `
 * 在mdserver-web点击`添加插件`	
 ```	
 
